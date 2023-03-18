@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Github Query</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script>
+    function Retrieve_json(username_git){
+      $.ajax({url: "https://api.github.com/users/" + username_git+"/repos",jsonp: true,method: "GET",dataType: "json",
+        success: function(data){
+          Append_data_table(data);
+        },
+      });
+    }
+    function Append_data_table(json_data){
+      var html = "";
+      $.each(json_data, function (key, item) {
+        html += formatItem(item);
+      });
+      $("#tbdata").empty().append(html);
+    }
+    function formatItem(item) {
+      return "<tr> <td>" +item.name + "</td><td>" + item.description + "</td><td>" + item.watchers_count + "</td> </tr>";
+    }
+    $(document).ready(function(){
+      $("button").click(function(){
+        var username_git = $("#demo").val();
+        Retrieve_json(username_git);
+      });
+      $('#demo').keypress(function (e) {
+        if (e.which === 13) {
+          var username_git = $("#demo").val();
+          Retrieve_json(username_git);
+          return false;
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container mt-3">
+  <h2>Github Query</h2>
+  <form>
+    <label for="demo">Escribe tu usuario de Github:</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Usuario" id="demo" name="usuario">
+    </div>
+  </form>
+</div>
+<div class="container">
+  <button type="button" class="btn btn-primary btn-block">Buscar</button>
+  <br>
+</div>
+
+<div class="Output Container">
+  <h2>Repositories</h2>
+  <table id = "table_git" class="table">
+    <thead>
+    <tr>
+      <th>Repository Name</th>
+      <th>Description</th>
+      <th>Followers</th>
+    </tr>
+    </thead>
+    <tbody
+            id="tbdata">
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
