@@ -25,7 +25,12 @@
       $("#tbdata").empty().append(html);
     }
     function formatItem(item) {
-      return "<tr> <td>" +item.name + "</td><td>" + item.description + "</td><td>" + item.watchers_count + "</td> </tr>";
+      if (item.description == null){
+        return "<tr> <td>" + item.name + "</td><td>" + " " + "</td><tr>";
+      }
+      else {
+        return "<tr> <td>" + item.name + "</td><td>" + item.description + "</td><tr>";
+      }
     }
     $(document).ready(function(){
       $("button").click(function(){
@@ -64,7 +69,6 @@
     <tr>
       <th>Repository Name</th>
       <th>Description</th>
-      <th>Followers</th>
     </tr>
     </thead>
     <tbody
